@@ -245,7 +245,7 @@ export default function Home() {
     {
       company: "Tuck Advisors",
       role: "Software Engineer",
-      period: "Mar 2025 - Jun 2025",
+      period: "Mar 2025 - Jan 2026",
       location: "Hanover, NH",
       description: [
         "Promoted from intern to lead the firm's technology function; built the full AI & automation stack for operations.",
@@ -285,7 +285,7 @@ export default function Home() {
     {
       company: "DARTS (Dartmouth Advising & Research for Tech Start-Ups)",
       role: "President",
-      period: "Nov 2023 - Present",
+      period: "Nov 2023 - Nov 2025",
       location: "Hanover, NH",
       description: [
         "Led consulting for Scale AI and other Series A-C startups, managing a team of 5 analysts.",

@@ -248,9 +248,9 @@ export default function Home() {
       period: "Mar 2025 - Jan 2026",
       location: "Hanover, NH",
       description: [
-        "Promoted from intern to lead the firm's technology function; built the full AI & automation stack for operations.",
+        "Promoted from intern to lead the firm's technology function; built the AI & automation stack for operations.",
         "Automated analyst workflows (emails, call notes, client research) to support faster daily decision-making.",
-        "Built a custom Chrome extension, CRM automations, fit scoring and target search, and AI deal analyzer tech.",
+        "Developed a custom Chrome extension, CRM automations, fit scoring and target search, and AI deal analyzer tech.",
         "Built systems that became core tooling used by deal teams across multiple successful M&A processes in 2025.",
       ],
       url: "https://www.tuckadvisors.com/",
@@ -337,9 +337,9 @@ export default function Home() {
         <div
           className={`relative z-10 max-w-4xl mx-auto px-6 sm:px-8 lg:px-16 w-full transition-opacity duration-1000 ease-out ${galaxyReady ? "opacity-100" : "opacity-0"}`}
         >
-          <div className="flex items-center gap-10 sm:gap-14 w-full">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-8 sm:gap-14 w-full">
             <div className="shrink-0">
-              <div className="w-[180px] sm:w-[220px] aspect-square rounded-xl overflow-hidden border border-border">
+              <div className="w-[140px] sm:w-[220px] aspect-square rounded-xl overflow-hidden border border-border">
                 <Image
                   src="/images/headshot.jpeg"
                   alt="Martin Coleman headshot"

@@ -44,11 +44,13 @@ function CyclingInterests() {
 
 const IFRAME_VIEWPORT = { width: 1920, height: 1200 } // 16:10 full-screen simulation
 
-function IframePreview({ url, title }: { url: string; title: string }) {
+function IframePreview({ url, title, screenshot }: { url: string; title: string; screenshot?: string }) {
   const [isOpen, setIsOpen] = useState(false)
+  const thumbnailRef = useRef<HTMLButtonElement>(null)
   const modalRef = useRef<HTMLDivElement>(null)
   const modalContainerRef = useRef<HTMLDivElement>(null)
   const [modalScale, setModalScale] = useState(0.5)
+  const thumbnailScale = 256 / IFRAME_VIEWPORT.width
 
   useEffect(() => {
     if (isOpen && modalRef.current) {
@@ -74,31 +76,39 @@ function IframePreview({ url, title }: { url: string; title: string }) {
     return () => observer.disconnect()
   }, [isOpen])
 
-  const thumbnailScale = 256 / IFRAME_VIEWPORT.width
-
   return (
     <>
       <button
+        ref={thumbnailRef}
         onClick={() => setIsOpen(true)}
         className="group relative w-full max-w-[256px] aspect-[16/10] rounded-lg border border-border overflow-hidden hover:border-muted-foreground/50 transition-all duration-500 hover:shadow-lg cursor-pointer bg-secondary"
       >
-        <div
-          className="absolute left-1/2 top-0 origin-top"
-          style={{
-            width: IFRAME_VIEWPORT.width,
-            height: IFRAME_VIEWPORT.height,
-            transform: `translateX(-50%) scale(${thumbnailScale})`,
-          }}
-        >
-          <iframe
-            src={url}
-            title={`${title} preview`}
-            className="w-full h-full pointer-events-none"
-            style={{ width: IFRAME_VIEWPORT.width, height: IFRAME_VIEWPORT.height }}
+        {screenshot ? (
+          <Image
+            src={screenshot}
+            alt={`${title} preview`}
+            fill
+            className="object-cover object-top"
             loading="lazy"
-            sandbox="allow-scripts allow-same-origin"
           />
-        </div>
+        ) : (
+          <div
+            className="absolute left-1/2 top-0 origin-top"
+            style={{
+              width: IFRAME_VIEWPORT.width,
+              height: IFRAME_VIEWPORT.height,
+              transform: `translateX(-50%) scale(${thumbnailScale})`,
+            }}
+          >
+            <iframe
+              src={url}
+              title={`${title} preview`}
+              className="w-full h-full pointer-events-none"
+              style={{ width: IFRAME_VIEWPORT.width, height: IFRAME_VIEWPORT.height }}
+              sandbox="allow-scripts allow-same-origin"
+            />
+          </div>
+        )}
         <div className="absolute inset-0 bg-background/0 group-hover:bg-background/10 transition-colors duration-300 flex items-center justify-center">
           <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 px-4 py-2 bg-background/90 text-foreground text-sm rounded-full border border-border backdrop-blur-sm">
             View Live Site
@@ -178,8 +188,9 @@ function IframePreview({ url, title }: { url: string; title: string }) {
 export default function Home() {
   const [galaxyReady, setGalaxyReady] = useState(false)
   const [showComet, setShowComet] = useState(false)
-  const [activeSection, setActiveSection] = useState("")
   const sectionsRef = useRef<(HTMLElement | null)[]>([])
+  const navButtonsRef = useRef<(HTMLButtonElement | null)[]>([])
+  const NAV_SECTIONS = ["intro", "work", "connect"]
 
   useEffect(() => {
     if (!galaxyReady) return
@@ -193,7 +204,13 @@ export default function Home() {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add("animate-fade-in-up")
-            setActiveSection(entry.target.id)
+            const idx = NAV_SECTIONS.indexOf(entry.target.id)
+            navButtonsRef.current.forEach((btn, i) => {
+              if (!btn) return
+              btn.className = `w-2 h-8 rounded-full transition-all duration-500 ${
+                i === idx ? "bg-foreground" : "bg-muted-foreground/30 hover:bg-muted-foreground/60"
+              }`
+            })
           }
         })
       },
@@ -205,6 +222,7 @@ export default function Home() {
     })
 
     return () => observer.disconnect()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleGalaxyReady = useCallback(() => setGalaxyReady(true), [])
@@ -222,6 +240,7 @@ export default function Home() {
       ],
       url: "https://www.secondwind.cloud/",
       hasPreview: true,
+      screenshot: "/images/secondwind-screenshot.png",
     },
     {
       company: "Tuck Advisors",
@@ -284,13 +303,12 @@ export default function Home() {
       {showComet && <CometEffect />}
       <nav className="fixed left-8 top-1/2 -translate-y-1/2 z-10 hidden lg:block">
         <div className="flex flex-col gap-4">
-          {["intro", "work", "connect"].map((section) => (
+          {NAV_SECTIONS.map((section, i) => (
             <button
               key={section}
+              ref={(el) => { navButtonsRef.current[i] = el }}
               onClick={() => document.getElementById(section)?.scrollIntoView({ behavior: "smooth" })}
-              className={`w-2 h-8 rounded-full transition-all duration-500 ${
-                activeSection === section ? "bg-foreground" : "bg-muted-foreground/30 hover:bg-muted-foreground/60"
-              }`}
+              className="w-2 h-8 rounded-full transition-all duration-500 bg-muted-foreground/30 hover:bg-muted-foreground/60"
               aria-label={`Navigate to ${section}`}
             />
           ))}
@@ -401,7 +419,7 @@ export default function Home() {
                       <div className="text-xs text-muted-foreground">{job.location}</div>
                       {job.hasPreview && job.url && (
                         <div className="pt-3">
-                          <IframePreview url={job.url} title={job.company} />
+                          <IframePreview url={job.url} title={job.company} screenshot={job.screenshot} />
                         </div>
                       )}
                       {!job.hasPreview && job.logo && (

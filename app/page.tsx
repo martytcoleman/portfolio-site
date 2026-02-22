@@ -188,9 +188,14 @@ function IframePreview({ url, title, screenshot }: { url: string; title: string;
 export default function Home() {
   const [galaxyReady, setGalaxyReady] = useState(false)
   const [showComet, setShowComet] = useState(false)
+  const [showPreviews, setShowPreviews] = useState(false)
   const sectionsRef = useRef<(HTMLElement | null)[]>([])
   const navButtonsRef = useRef<(HTMLButtonElement | null)[]>([])
   const NAV_SECTIONS = ["intro", "work", "connect"]
+
+  useEffect(() => {
+    if (window.innerWidth >= 640) setShowPreviews(true)
+  }, [])
 
   useEffect(() => {
     if (!galaxyReady) return
@@ -255,6 +260,7 @@ export default function Home() {
       ],
       url: "https://www.tuckadvisors.com/",
       hasPreview: true,
+      mobileScreenshot: "/images/tuck-screenshot.png",
     },
     {
       company: "FusionTally",
@@ -268,6 +274,7 @@ export default function Home() {
       tech: ["React", "Node.js", "PostgreSQL", "Analytics"],
       url: "https://www.fusiontally.com/",
       hasPreview: true,
+      mobileScreenshot: "/images/fusiontally-screenshot.png",
     },
     {
       company: "Coleman Test Prep",
@@ -417,11 +424,15 @@ export default function Home() {
                       <div className="text-muted-foreground">{job.role}</div>
                       <div className="text-xs text-muted-foreground font-mono">{job.period}</div>
                       <div className="text-xs text-muted-foreground">{job.location}</div>
-                      {job.hasPreview && job.url && (
+                      {job.hasPreview && job.url && (showPreviews ? (
                         <div className="pt-3">
                           <IframePreview url={job.url} title={job.company} screenshot={job.screenshot} />
                         </div>
-                      )}
+                      ) : (job.mobileScreenshot ?? job.screenshot) ? (
+                        <div className="pt-3">
+                          <IframePreview url={job.url} title={job.company} screenshot={job.mobileScreenshot ?? job.screenshot} />
+                        </div>
+                      ) : null)}
                       {!job.hasPreview && job.logo && (
                         <div className="pt-3">
                           <div className="relative w-full max-w-[256px] aspect-[16/10] rounded-lg overflow-hidden bg-black flex items-center justify-center">

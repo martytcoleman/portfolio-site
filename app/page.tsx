@@ -468,7 +468,7 @@ export default function Home() {
 
             <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed max-w-lg">
               Always interested in new opportunities, collaborations, and conversations about technology, startups,
-              and building things that matter.
+              and building cool stuff.
             </p>
 
             <div className="space-y-3">

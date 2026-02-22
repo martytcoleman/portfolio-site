@@ -10,7 +10,7 @@ const geist = Geist({
 })
 
 export const metadata: Metadata = {
-  title: "Martin Coleman - Software Engineer & Startup Founder",
+  title: "Marty Coleman | Personal Website",
   description: "Software engineer and startup founder at Dartmouth College. Building products at the intersection of AI, automation, and business.",
 }
 

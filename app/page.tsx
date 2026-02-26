@@ -364,7 +364,7 @@ export default function Home() {
                 <span className="text-foreground">Marty.</span>
               </h1>
               <p className="text-base sm:text-lg text-muted-foreground leading-relaxed max-w-md">
-                {"I'm a junior at Dartmouth studying Computer Science and Math. I'm interested in how AI changes what people think—and what they do."}
+                {"I'm a junior at Dartmouth studying Computer Science and Math. I'm interested in the next layer of the internet: infrastructure for AI and information."}
               </p>
               <div className="text-sm text-muted-foreground/60 font-mono tracking-wider pt-2">
                 {"Also into "}
